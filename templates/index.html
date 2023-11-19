@@ -1,0 +1,115 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="recommendation-box">
+    <h2 class="recommendation-header">Recommendations by your Movie Pal 🍿</h2>
+    <ul id="recommendations-list" class="recommendations-list"></ul>
+    <form id="recommendation-form">
+        <label for="movie-title"></label>
+        <input autocomplete="off" type="text" id="movie-title" name="movie-title" placeholder="Enter movie title">
+        <label for="movie-ids"></label>
+        <ul id="selected-movies-list" class="recommendation-list"></ul>
+        <button type="submit" id="generate-button">Generate Recommendations</button>
+    </form>
+    <ul id="recommendation-suggestions" class="search-suggestions"></ul>
+</div>
+
+<script>
+    $(document).ready(function () {
+        const selectedMoviesList = $("#selected-movies-list");
+        const generateButton = $("#generate-button");
+        const suggestionsList = $("#recommendation-suggestions");
+        const movieTitleInput = $("#movie-title");
+        const recommendationsList = $("#recommendations-list");
+
+        // Add loading spinner HTML
+        const loadingSpinner = '<div class="loading-container"><div class="loading-spinner"></div></div>';
+        
+        // When a key is released in the Search input
+        movieTitleInput.on('keyup', function () {
+            const movieTitle = movieTitleInput.val();
+            // Make an AJAX request to the '/search_suggestions' route
+            $.get('/search_suggestions', { query: movieTitle }, function (data) {
+                var suggestions = data.suggestions.slice(0, 5); // Limit to 5 suggestions
+                suggestionsList.empty(); // Clear previous suggestions
+                suggestions.forEach(function (suggestion) {
+                    const imdbLink = 'https://www.imdb.com/title/tt' + suggestion.imdbId + '/';
+                    suggestionsList.append('<li><a class="add-movie" data-id="' + suggestion.movieId + '" href="#">Add: ' + suggestion.title + ' (' + suggestion.year + ')<a href="' + imdbLink + '" target="_blank">IMDb</a></a></li>');
+                });
+            });
+        });
+
+        // Add selected movies to the list
+        $(document).on('click', '.add-movie', function (e) {
+            e.preventDefault();
+            const movieId = $(this).data('id');
+            const movieText = $(this).text().replace('Add: ', ''); // Text contains title and year
+            const movieTitle = movieText.split(' (')[0]; // Extract the title
+            const movieYear = movieText.split(' (')[1].split(')')[0]; // Extract the year
+            // Add the movie to the selected list
+            selectedMoviesList.append('<li class="selected-movie"><a class="remove-movie" data-id="' + movieId + '" href="#">Remove: ' + movieTitle + ' (' + movieYear + ')</a></li>');
+            // Remove the suggestion from the suggestions list
+            $(this).parent().remove();
+        });
+
+        // Remove selected movies from the list
+        $(document).on('click', '.remove-movie', function (e) {
+            e.preventDefault();
+            const movieId = $(this).data('id');
+            const movieTitle = $(this).text().replace('Remove: ', '');
+            // Add the movie back to the suggestions
+            suggestionsList.append('<li><a class="add-movie" data-id="' + movieId + '" href="#">Add: ' + movieTitle + '</a></li>');
+            $(this).parent().remove();
+        });
+
+        generateButton.on('click', function (e) {
+            e.preventDefault();
+            const selectedMovieIds = [];
+
+            // Collect the selected movie IDs
+            selectedMoviesList.find('.remove-movie').each(function () {
+                selectedMovieIds.push($(this).data('id'));
+            });
+
+            // Show loading spinner
+            recommendationsList.html(loadingSpinner);
+
+            // Send the selected movie IDs to the server for recommendation
+            $.post('/generate_recommendations', { selected_movies: selectedMovieIds }, function (data) {
+                var recommendations = data.recommendations;
+
+                // Display recommendations on your web page
+                recommendationsList.empty(); // Clear the loading spinner
+                recommendations.forEach(function (recommendation) {
+                    recommendationsList.append('<li><a href="/movie/' + recommendation.movieId + '" target="_blank">' + recommendation.title + ' (' + recommendation.year + ')</a></li>');
+                });
+            })
+            .fail(function() {
+                // Handle failure, remove loading spinner
+                recommendationsList.html('<p>Failed to generate recommendations.</p>');
+            });
+        });
+    });
+</script>
+
+<div class="genre-box">
+    <h2 class="genre-header">Genres</h2>
+    <ul class="genre-list">
+        {% for genre in genres %}
+            <li><a class="genre-link" href="/genre/{{ genre }}">{{ genre }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+
+<h2 class="top-genres-header">Top 5 by Genre</h2>
+{% for genre, top_movies in top_movies_by_genre.items() %}
+<div class="genre-block">
+    <h3 class="genre-title">{{ genre }}</h3>
+    <ul class="recommendations-list">
+        {% for movie in top_movies %}
+            <li><a href="/movie/{{ movie.movieId }}" target="_blank">{{ movie.title }} - Rating: {{ '%.2f'|format(movie.rating) }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endfor %}
+{% endblock %}

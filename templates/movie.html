@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="movie-details movie-box">
+        <h1>{{ movie.title }}</h1>
+        <p class="imdb-link"><a href="https://www.imdb.com/title/tt{{ movie.imdbId }}" target="_blank">IMDb</a></p>
+    </div>
+
+    <div class="movie-info movie-box">
+        <div class="movie-info-left">
+            <p><strong>Year:</strong> {{ movie.year }}</p>
+            <p><strong>Genres:</strong> 
+                {% for genre in movie.genres.split('|') %}
+                    <a href="/genre/{{ genre }}">{{ genre }}</a>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        </div>
+
+        <div class="movie-info-right">
+            <p><strong>Rating:</strong> {{ '%.2f'|format(movie.rating) }}</p>
+            <p><strong>Reviews count:</strong> {{ '%.0f'|format(movie.review_count) }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

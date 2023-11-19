@@ -1,0 +1,158 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2 class="genre-header">{{ genre }} Movies</h2>
+
+<link rel="stylesheet" href="styles.css">
+<div class="genre-filters">
+    <label for="year-filter">Year:</label>
+    <select id="year-filter" name="year-filter">
+        <option value="all">All</option>
+        {% for year in unique_years %}
+            <option value="{{ year }}">{{ year }}</option>
+        {% endfor %}
+    </select>
+    <div class="filter-separator"></div>
+    <label for="rating-filter">Rating:</label>
+    <div id="rating-buttons">
+        <button class="rating-filter-button" data-rating="1">1+</button>
+        <button class="rating-filter-button" data-rating="2">2+</button>
+        <button class="rating-filter-button" data-rating="3">3+</button>
+        <button class="rating-filter-button" data-rating="4">4+</button>
+        <button class="rating-filter-button" data-rating="5">5</button>
+    </div>
+    <button id="clear-filters">Clear Filters</button>
+</div>
+
+<div id="filtered-movies">
+    <ul class="genre-movie-list">
+        {% for movie in movies %}
+            <li class="genre-movie-item">
+                {% if movie.rating is defined and movie.rating is not none %}
+                    <a class="genre-movie-link" href="/movie/{{ movie.movieId }}">
+                        <div class="movie-details">
+                            <span class="genre-title"><strong>{{ movie.title }}</strong></span>
+                            <span class="genre-year"><i>({{ movie.year }})</i></span>
+                        </div>
+                        <div class="rating-container">
+                            <span class="genre-rating">{{ '%.2f'|format(movie.rating) }}</span>
+                            <span class="genre-star">★</span>
+                        </div>
+                    </a>
+                {% else %}
+                    <a class="genre-movie-link" href="/movie/{{ movie.movieId }}">
+                        <div class="movie-details">
+                            <span class="genre-title"><strong>{{ movie.title }}</strong></span>
+                            <span class="genre-year"><i>({{ movie.year }})</i></span>
+                        </div>
+                        <span class="genre-na-rating">N/A</span>
+                    </a>
+                {% endif %}
+            </li>        
+        {% endfor %}
+    </ul>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const filteredMoviesList = document.getElementById("filtered-movies");
+            const yearFilter = document.getElementById("year-filter");
+            const ratingButtons = document.querySelectorAll(".rating-filter-button");
+            const clearFiltersButton = document.getElementById("clear-filters");
+
+            // Agrega un controlador de eventos de cambio para el filtro de rating
+            ratingButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    ratingButtons.forEach(function (btn) {
+                        btn.classList.remove("selected");
+                    });
+                    button.classList.add("selected");
+                    updateMovies();
+                });
+            });
+
+            // Agrega un controlador de eventos de cambio para el filtro de año
+            yearFilter.addEventListener("change", updateMovies);
+
+            // Agrega un controlador de eventos para el botón "Clear Filters"
+            clearFiltersButton.addEventListener("click", function () {
+                yearFilter.value = "all"; // Reset the year filter
+                ratingButtons.forEach(function (btn) {
+                    btn.classList.remove("selected"); // Reset the rating filter
+                });
+                updateMovies();
+            });
+    
+            // Agrega un controlador de eventos de cambio para el filtro de año
+            yearFilter.addEventListener("change", updateMovies);
+    
+            function updateMovies() {
+                const selectedYear = yearFilter.value;
+                const selectedRating = getSelectedRating();
+
+                // Realiza una solicitud AJAX al servidor
+                fetch(`/filter_movies?year=${selectedYear}&rating=${selectedRating}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // Limpia la lista actual de películas filtradas
+                        filteredMoviesList.innerHTML = "";
+                        
+                        // Agrega las películas filtradas a la lista
+                        data.forEach((movie) => {
+                            const movieItem = document.createElement("div");
+                            movieItem.classList.add("genre-movie-item");
+                            const movieLink = document.createElement("a");
+                            movieLink.classList.add("genre-movie-link"); // Agrega la class
+                            movieLink.href = `/movie/${movie.movieId}`;
+    
+                            const movieDetails = document.createElement("div");
+                            movieDetails.classList.add("movie-details");
+    
+                            const genreTitle = document.createElement("span");
+                            genreTitle.classList.add("genre-title");
+                            genreTitle.innerHTML = `<strong>${movie.title}</strong>`;
+    
+                            const genreYear = document.createElement("span");
+                            genreYear.classList.add("genre-year");
+                            genreYear.innerHTML = ` <i>(${movie.year})</i>`;
+    
+                            movieDetails.appendChild(genreTitle);
+                            movieDetails.appendChild(genreYear);
+    
+                            const ratingContainer = document.createElement("div");
+                            ratingContainer.classList.add("rating-container");
+    
+                            const genreRating = document.createElement("span");
+                            genreRating.classList.add("genre-rating");
+                            genreRating.textContent = `${movie.rating !== null ? movie.rating.toFixed(2) : "N/A"}`;
+    
+                            const genreStar = document.createElement("span");
+                            genreStar.classList.add("genre-star");
+                            genreStar.textContent = "★";
+    
+                            ratingContainer.appendChild(genreRating);
+                            ratingContainer.appendChild(genreStar);
+    
+                            movieLink.appendChild(movieDetails);
+                            movieLink.appendChild(ratingContainer);
+    
+                            movieItem.appendChild(movieLink);
+                            filteredMoviesList.appendChild(movieItem);
+                        });
+                    });
+            }
+    
+            function getSelectedRating() {
+                // Obtiene el rating seleccionado
+                for (const button of ratingButtons) {
+                    if (button.classList.contains("selected")) {
+                        return button.getAttribute("data-rating");
+                    }
+                }
+                return "all"; // Si ninguno está seleccionado, devuelve "all"
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MoviePal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static',filename='favicon.ico') }}">
+</head>
+<body>
+    <header>
+        <h1><a href="/">MoviePal</a></h1>
+        <div class="search-bar">
+            <form action="/search" method="get">
+                <input autocomplete="off" type="text" name="query" id="search-input" placeholder="Search movies...">
+                <button type="submit">Search</button>
+            </form>
+            <ul id="suggestions" class="search-suggestions"></ul>
+        </div>
+    </header>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // When a key is released in the search input
+            $("#search-input").on('keyup', function () {
+                var query = $(this).val();
+                // Make an AJAX request to the '/search_suggestions' route
+                $.get('/search_suggestions', { query: query }, function (data) {
+                    var suggestions = data.suggestions;
+                    var suggestionList = $("#suggestions");
+                    suggestionList.empty();
+                    // Limit the number of suggestions to 10
+                    var limitedSuggestions = suggestions.slice(0, 10);
+                    limitedSuggestions.forEach(function (suggestion) {
+                        suggestionList.append('<li><a href="/movie/' + suggestion.movieId + '">' + suggestion.title + '</a></li>');
+                    });
+                });
+            });
+        });
+    </script>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

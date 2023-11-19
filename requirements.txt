@@ -1,0 +1,9 @@
+sqlite3
+Flask
+Flask-Session
+requests
+shutil
+zipfile
+os
+datetime
+pandas

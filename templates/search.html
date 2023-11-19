@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="search-results-container">
+        <h2 class="genre-header">Search Results</h2>
+        <ul class="genre-movie-list">
+            {% for movie in results %}
+                <li class="genre-movie-item">
+                    <a class="genre-movie-link" href="/movie/{{ movie.movieId }}">
+                        <div class="movie-details">
+                            <span class="genre-title"><strong>{{ movie.title }}</strong></span>
+                            <span class="genre-year"><i>({{ movie.year }})</i></span>
+                        </div>
+                        <div class="rating-container">
+                            <span class="genre-rating">{{ '%.2f'|format(movie.rating) }}</span>
+                            <span class="genre-star">★</span>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

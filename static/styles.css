@@ -1,0 +1,449 @@
+/* Media query */
+@media screen and (max-width: 768px) {
+    .movie-info {
+        flex-direction: column;
+    }
+
+    .movie-info-left, .movie-info-right {
+        width: 100%;
+    }
+}
+
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+/* Header styles */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+/* Content styles */
+.content {
+    margin: 0 20px;
+    padding: 20px;
+}
+
+/* Main header link style */
+header a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 24px;
+}
+
+/* Search bar styles */
+.search-bar {
+    text-align: center;
+    margin: 20px;
+}
+
+/* Search form styles */
+.search-bar form {
+    display: inline;
+}
+
+.search-bar input[type="text"] {
+    padding: 5px;
+    width: 250px;
+    border: 1px solid #ccc;
+}
+
+/* Search button styles */
+.search-bar button {
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.search-bar button:hover {
+    background-color: #444;
+}
+
+/* Search suggestions text styles */
+.search-suggestions li a {
+    font-size: 14px;
+}
+
+/* Links styles */
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* List styles */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Movie details styles */
+h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+p {
+    margin: 0;
+}
+
+/* IMDb link styles */
+a.imdb-link {
+    display: block;
+    margin-top: 10px;
+}
+
+/* Genre list styles */
+.genre-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Styles for each genre item */
+.genre-list li {
+    margin: 5px;
+}
+
+/* Movie box styles */
+.movie-box {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Movie details styles */
+.movie-details {
+    background-color: #f2f2f2;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Movie info styles */
+.movie-info {
+    display: flex;
+    justify-content: space-between;
+    background-color: #e6e6e6;
+    padding: 10px;
+}
+
+.movie-info-left, .movie-info-right {
+    width: 48%;
+}
+
+/* Filters styles */
+.genre-filters {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+    gap: 10px;
+}
+
+.genre-filters label {
+    margin-right: 10px;
+}
+
+.rating-buttons {
+    display: flex;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+}
+
+/* Recommendations styles */
+#rating-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.rating-filter-button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+.rating-filter-button.selected {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.filter-separator {
+    margin-right: 10px;
+}
+
+.recommendations-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.recommendations-list li {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.recommendations-list li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.recommendations-list li a:hover {
+    color: #007bff;
+}
+
+.recommendations-list li a::before {
+    content: '🎬';
+    margin-right: 5px;
+}
+
+.recommendation-box {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.recommendation-header {
+    color: #333;
+    font-size: 1.5em;
+    margin-top: 10px;
+}
+
+/* Styles for recommendation suggestions */
+#recommendation-suggestions {
+    list-style: none;
+    padding: 0;
+}
+
+#recommendation-suggestions li {
+    margin: 5px 0;
+}
+
+#recommendation-suggestions a {
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 5px;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+#recommendation-suggestions a:hover {
+    background-color: #eee;
+}
+
+/* Movie lists styles */
+.genre-movie-list {
+    list-style: none;
+    margin: 0;
+}
+
+.genre-movie-item {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    transition: background-color 0.3s ease;
+}
+
+.genre-movie-item:hover {
+    background-color: #e5e5e5;
+}
+
+.genre-movie-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.genre-star {
+    color: #FFD700;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.rating-container {
+    display: flex;
+    align-items: center;
+}
+
+.genre-rating {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.genre-year {
+    font-weight: italic;
+}
+
+#clear-filters {
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 5px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#clear-filters:hover {
+    background-color: #ddd;
+}
+
+/* Genre box styles */
+.genre-box {
+    background-color: #ddd;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.genre-header {
+    color: #333;
+}
+
+.genre-link {
+    color: #333;
+    text-decoration: none;
+}
+
+.genre-link:hover {
+    text-decoration: bold;
+}
+
+.top-genres-header {
+    color: #333;
+}
+
+.genre-title {
+    background-color: #ddd;
+    color: #333;
+    padding: 5px;
+    border-radius: 5px 5px 0 0;
+}
+
+.genre-block {
+    background-color: #eee;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 0 0 5px 5px;
+}
+
+/* Selected movies styles */
+#selected-movies-list {
+    list-style: none;
+    padding: 0;
+}
+
+#selected-movies-list li {
+    margin: 5px 0;
+}
+
+#selected-movies-list a {
+    text-decoration: none;
+    color: #333;
+    background-color: #eee;
+    padding: 5px;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+#selected-movies-list a:hover {
+    background-color: #ccc;
+}
+
+/* Search bar style */
+#movie-title {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 70%;
+    margin-right: 10px;
+}
+
+/* Generate Recommendations button style */
+#generate-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#generate-button:hover {
+    background-color: #45a049;
+}
+
+.genre-header {
+    background-color: #E0E0E0;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+/* Suggestions loading */
+.loading-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.loading-spinner {
+    width: 3rem;
+    height: 3rem;
+    display: inline-block;
+    border: .2rem solid currentColor;
+    border-right: .2rem solid transparent;
+    border-radius: 50%;
+    animation: spin .75s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
